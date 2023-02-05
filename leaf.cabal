@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Todo
   other-modules:
       Paths_leaf
   hs-source-dirs:
@@ -33,6 +34,8 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , containers
+    , mtl
   default-language: Haskell2010
 
 executable leaf-exe
@@ -44,7 +47,9 @@ executable leaf-exe
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
     , leaf
+    , mtl
   default-language: Haskell2010
 
 test-suite leaf-test
@@ -57,5 +62,7 @@ test-suite leaf-test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
     , leaf
+    , mtl
   default-language: Haskell2010
