@@ -1,5 +1,9 @@
 module Todo
-  ( TodoList
+  ( Date
+  , TodoList(..)
+  , isLeaf
+  , isBranch
+  , isRoot
   , createOrder
   ) where
 
