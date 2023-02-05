@@ -27,6 +27,7 @@ library
   exposed-modules:
       Lib
       Todo
+      Todo.Safe
   other-modules:
       Paths_leaf
   hs-source-dirs:
