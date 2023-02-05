@@ -3,8 +3,14 @@ module Todo
   , createOrder
   ) where
 
-import Data.Maybe
 import Control.Monad.State
+  ( State
+  , runState
+  , get
+  , put
+  , modify
+  , forM
+  )
 import qualified Data.Set as Set
 
 data Date = Date deriving (Show, Read, Eq, Ord)
