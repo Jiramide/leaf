@@ -1,6 +1,7 @@
 module Todo
   ( Date
-  , TodoList(..)
+  , TodoItem(..)
+  , TodoList
   , isLeaf
   , isBranch
   , isRoot
@@ -24,38 +25,40 @@ import Data.Set
 
 data Date = Date deriving (Show, Read, Eq, Ord)
 
-data TodoList
-  = Leaf { title :: String, after :: [TodoList] }
+data TodoItem
+  = Leaf { title :: String, after :: [TodoItem] }
   | Branch
       { title :: String
       , description :: String
       , dueDate :: Date
-      , after :: [TodoList]
+      , after :: [TodoItem]
       }
   | Root
       { title :: String
       , description :: String
       , startDate :: Date
       , endDate :: Date
-      , after :: [TodoList]
+      , after :: [TodoItem]
       }
   deriving (Show, Read, Eq, Ord)
 
-isLeaf :: TodoList -> Bool
+type TodoList = [TodoItem]
+
+isLeaf :: TodoItem -> Bool
 isLeaf (Leaf _ _) = True
 isLeaf _ = False
 
-isBranch :: TodoList -> Bool
+isBranch :: TodoItem -> Bool
 isBranch (Branch _ _ _ _) = True
 isBranch _ = False
 
-isRoot :: TodoList -> Bool
+isRoot :: TodoItem -> Bool
 isRoot x = not $ isLeaf x || isBranch x
 
-createOrder :: TodoList -> [TodoList]
+createOrder :: TodoItem -> [TodoItem]
 createOrder todo = fst $ runState (createOrder' todo) empty
   where
-    createOrder' :: TodoList -> State (Set TodoList) [TodoList]
+    createOrder' :: TodoItem -> State (Set TodoItem) [TodoItem]
     createOrder' todo' = do
       visited <- get
       if (member todo' visited)
