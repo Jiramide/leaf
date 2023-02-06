@@ -15,7 +15,12 @@ import Control.Monad.State
   , modify
   , forM
   )
-import qualified Data.Set as Set
+import Data.Set
+  ( Set
+  , empty
+  , insert
+  , member
+  )
 
 data Date = Date deriving (Show, Read, Eq, Ord)
 
@@ -48,14 +53,14 @@ isRoot :: TodoList -> Bool
 isRoot x = not $ isLeaf x || isBranch x
 
 createOrder :: TodoList -> [TodoList]
-createOrder todo = fst $ runState (createOrder' todo) Set.empty
+createOrder todo = fst $ runState (createOrder' todo) empty
   where
-    createOrder' :: TodoList -> State (Set.Set TodoList) [TodoList]
+    createOrder' :: TodoList -> State (Set TodoList) [TodoList]
     createOrder' todo' = do
       visited <- get
-      if (Set.member todo' visited)
+      if (member todo' visited)
         then return []
         else do
-          modify $ Set.insert todo'
+          modify $ insert todo'
           subOrders <- forM (after todo') createOrder' 
           return $ mconcat subOrders `mappend` [todo']
