@@ -1,16 +1,19 @@
-module Todo
-  ( Date
+module Todo.Todo
+  ( Date(..)
   , TodoItem(..)
   , TodoList
   , isLeaf
   , isBranch
   , isRoot
+  , createOrderMany
   , createOrder
+  , shouldBeAfter
   ) where
 
 import Control.Monad.State
   ( State
   , runState
+  , evalState
   , get
   , put
   , modify
@@ -55,15 +58,23 @@ isBranch _ = False
 isRoot :: TodoItem -> Bool
 isRoot x = not $ isLeaf x || isBranch x
 
-createOrder :: TodoItem -> [TodoItem]
-createOrder todo = fst $ runState (createOrder' todo) empty
-  where
-    createOrder' :: TodoItem -> State (Set TodoItem) [TodoItem]
-    createOrder' todo' = do
-      visited <- get
-      if (member todo' visited)
-        then return []
-        else do
-          modify $ insert todo'
-          subOrders <- forM (after todo') createOrder' 
-          return $ mconcat subOrders `mappend` [todo']
+createOrderM :: TodoItem -> State (Set TodoItem) TodoList
+createOrderM todo = do
+  visited <- get
+  if (todo `member` visited)
+    then return []
+    else do
+      modify $ insert todo
+      subOrders <- forM (after todo) createOrderM
+      return $ mconcat subOrders `mappend` [todo]
+
+createOrderMany :: [TodoItem] -> TodoList
+createOrderMany = mconcat . (`evalState` empty) . mapM createOrderM
+
+createOrder :: TodoItem -> TodoList
+createOrder = (`evalState` empty) . createOrderM
+
+shouldBeAfter :: TodoItem -> TodoItem -> Bool
+shouldBeAfter todo before
+  = let dependents = after todo
+    in before `elem` dependents || any (`shouldBeAfter` before) dependents
