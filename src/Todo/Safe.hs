@@ -5,24 +5,24 @@ module Todo.Safe
   , safeEndDate
   ) where
 
-import Todo
+import Todo.Todo
 
-safeDescription :: TodoList -> Maybe String
+safeDescription :: TodoItem -> Maybe String
 safeDescription todo
   | isLeaf todo = Nothing
   | otherwise = Just $ description todo
 
-safeDueDate :: TodoList -> Maybe Date
+safeDueDate :: TodoItem -> Maybe Date
 safeDueDate todo
   | isBranch todo = Just $ dueDate todo
   | otherwise = Nothing
 
-safeStartDate :: TodoList -> Maybe Date
+safeStartDate :: TodoItem -> Maybe Date
 safeStartDate todo
   | isRoot todo = Just $ startDate todo
   | otherwise = Nothing
 
-safeEndDate :: TodoList -> Maybe Date
+safeEndDate :: TodoItem -> Maybe Date
 safeEndDate todo
   | isRoot todo = Just $ endDate todo
   | otherwise = Nothing

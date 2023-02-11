@@ -1,7 +1,7 @@
 module Main (main) where
 
 import Lib
-import Todo
+import Todo.Todo
 
 main :: IO ()
 main = someFunc
