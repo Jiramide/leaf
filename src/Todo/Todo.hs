@@ -17,6 +17,7 @@ import Control.Monad.State
   , modify
   , forM
   )
+import Data.Semigroup ((<>))
 import Data.Set
   ( Set
   , empty
@@ -41,6 +42,29 @@ data TodoItem
       , after :: [TodoItem]
       }
   deriving (Show)
+
+instance Eq TodoItem where
+  a == b = a `compare` b == EQ
+
+instance Ord TodoItem where
+  Leaf t a `compare` Leaf t' a' = t `compare` t' <> a `compare` a'
+  Leaf _ _ `compare` _ = LT
+
+  Branch _ _ _ _ `compare` Leaf _ _ = GT
+  Branch t d due a `compare` Branch t' d' due' a'
+    = t `compare` t'
+      <> d `compare` d'
+      <> zonedTimeToUTC due `compare` zonedTimeToUTC due'
+      <> a `compare` a'
+  Branch _ _ _ _ `compare` Root _ _ _ _ _ = LT
+
+  Root t d s e a `compare` Root t' d' s' e' a'
+    = t `compare` t'
+      <> d `compare` d'
+      <> zonedTimeToUTC s `compare` zonedTimeToUTC s'
+      <> zonedTimeToUTC e `compare` zonedTimeToUTC e'
+      <> a `compare` a'
+  Root _ _ _ _ _ `compare` _ = GT
 
 isLeaf :: TodoItem -> Bool
 isLeaf (Leaf _ _) = True
