@@ -28,6 +28,7 @@ library
       Lib
       Todo.Safe
       Todo.Todo
+      Todo.TodoList
   other-modules:
       Paths_leaf
   hs-source-dirs:
@@ -37,6 +38,7 @@ library
       base >=4.7 && <5
     , containers
     , mtl
+    , time
   default-language: Haskell2010
 
 executable leaf-exe
@@ -51,6 +53,7 @@ executable leaf-exe
     , containers
     , leaf
     , mtl
+    , time
   default-language: Haskell2010
 
 test-suite leaf-test
@@ -70,4 +73,5 @@ test-suite leaf-test
     , hspec-discover
     , leaf
     , mtl
+    , time
   default-language: Haskell2010

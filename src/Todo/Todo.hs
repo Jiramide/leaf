@@ -1,7 +1,5 @@
 module Todo.Todo
-  ( Date(..)
-  , TodoItem(..)
-  , TodoList
+  ( TodoItem(..)
   , isLeaf
   , isBranch
   , isRoot
@@ -25,27 +23,24 @@ import Data.Set
   , insert
   , member
   )
-
-data Date = Date deriving (Show, Read, Eq, Ord)
+import Data.Time (ZonedTime, zonedTimeToUTC)
 
 data TodoItem
   = Leaf { title :: String, after :: [TodoItem] }
   | Branch
       { title :: String
       , description :: String
-      , dueDate :: Date
+      , dueDate :: ZonedTime
       , after :: [TodoItem]
       }
   | Root
       { title :: String
       , description :: String
-      , startDate :: Date
-      , endDate :: Date
+      , startDate :: ZonedTime
+      , endDate :: ZonedTime
       , after :: [TodoItem]
       }
-  deriving (Show, Read, Eq, Ord)
-
-type TodoList = [TodoItem]
+  deriving (Show)
 
 isLeaf :: TodoItem -> Bool
 isLeaf (Leaf _ _) = True
@@ -58,7 +53,7 @@ isBranch _ = False
 isRoot :: TodoItem -> Bool
 isRoot x = not $ isLeaf x || isBranch x
 
-createOrderM :: TodoItem -> State (Set TodoItem) TodoList
+createOrderM :: TodoItem -> State (Set TodoItem) [TodoItem]
 createOrderM todo = do
   visited <- get
   if (todo `member` visited)
@@ -68,10 +63,10 @@ createOrderM todo = do
       subOrders <- forM (after todo) createOrderM
       return $ mconcat subOrders `mappend` [todo]
 
-createOrderMany :: [TodoItem] -> TodoList
+createOrderMany :: [TodoItem] -> [TodoItem]
 createOrderMany = mconcat . (`evalState` empty) . mapM createOrderM
 
-createOrder :: TodoItem -> TodoList
+createOrder :: TodoItem -> [TodoItem]
 createOrder = (`evalState` empty) . createOrderM
 
 shouldBeAfter :: TodoItem -> TodoItem -> Bool
