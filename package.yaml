@@ -40,9 +40,18 @@ library:
   source-dirs: src
 
 executables:
-  leaf-exe:
+  leaf-tui-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         app/tui
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - leaf
+  leaf-gui-exe:
+    main:                Main.hs
+    source-dirs:         app/gui
     ghc-options:
     - -threaded
     - -rtsopts
