@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Todo.Core
       Todo.Safe
       Todo.Todo
       Todo.TodoList

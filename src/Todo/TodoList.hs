@@ -5,9 +5,7 @@ module Todo.TodoList
   , getRoots
   ) where
 
-import Todo.Todo
-
-type TodoList = [TodoItem]
+import Todo.Core
 
 getLeaves :: TodoList -> TodoList
 getLeaves = undefined
