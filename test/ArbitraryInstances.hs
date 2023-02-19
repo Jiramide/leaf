@@ -18,8 +18,17 @@ import Data.Time.Calendar.OrdinalDate
 
 import Test.QuickCheck
 
+arbitraryString :: Gen String
+arbitraryString = listOf $ arbitraryPrintable
+  where arbitraryPrintable
+          = oneof
+              [ choose ('A', 'Z')
+              , choose ('a', 'z')
+              , choose ('0', '9')
+              ]
+
 instance Arbitrary TimeZone where
-  arbitrary = TimeZone <$> arbitrary <*> arbitrary <*> arbitrary
+  arbitrary = TimeZone <$> arbitrary <*> arbitrary <*> arbitraryString
 
 instance Arbitrary Day where
   arbitrary = fromOrdinalDate <$> arbitrary <*> arbitrary
@@ -38,20 +47,20 @@ instance Arbitrary TodoItem where
     where
       leaf
         = Leaf
-        <$> arbitrary -- title
+        <$> arbitraryString -- title
         <*> pure [] -- after
 
       branch
         = Branch
-        <$> arbitrary -- title
-        <*> arbitrary -- descripton
+        <$> arbitraryString -- title
+        <*> arbitraryString -- descripton
         <*> arbitrary -- dueDate
         <*> pure [] -- after
 
       root
         = Root
-        <$> arbitrary -- title
-        <*> arbitrary -- description
+        <$> arbitraryString -- title
+        <*> arbitraryString -- description
         <*> arbitrary -- startDate
         <*> arbitrary -- endDate
         <*> pure [] -- after
@@ -64,6 +73,6 @@ instance Arbitrary TodoItem where
 
   shrink x = shrinkDownwards x ++ genericShrink x
     where
-      shrinkDownwards (Leaf _ after) = after
-      shrinkDownwards (Branch title _ _ after) = [Leaf title after]
-      shrinkDownwards (Root title desc _ end after) = [Branch title desc end after]
+      shrinkDownwards (Leaf _ dependencies) = dependencies
+      shrinkDownwards (Branch name _ _ dependencies) = [Leaf name dependencies]
+      shrinkDownwards (Root name desc _ end dependencies) = [Branch name desc end dependencies]
