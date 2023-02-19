@@ -53,6 +53,10 @@ spec = do
           [ Leaf "I'm a child!" [] ]
           ) `shouldBe` False
 
-  modifyMaxSuccess (const 100) $ modifyMaxSize (const 10) $ describe "createOrder" $ do
-    it "always creates a topological order" $ property $ \ x ->
-      isTopological x `shouldBe` True
+  modifyMaxSuccess (const 1000) $ modifyMaxSize (const 7) $ describe "createOrder" $ do
+    it "always creates a topological order" $ property $ \x ->
+      isTopological (createOrder x) `shouldBe` True
+
+  modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ describe "createOrderMany" $ do
+    it "always creates a topological order" $ property $ \x ->
+      isTopological (createOrderMany x) `shouldBe` True
