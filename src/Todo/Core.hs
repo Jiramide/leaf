@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Todo.Core
   ( TodoItem(..)
   , TodoList
@@ -8,22 +10,24 @@ import Data.Time
   , zonedTimeToUTC
   )
 
+import GHC.Generics
+
 data TodoItem
-  = Leaf { title :: String, after :: [TodoItem] }
+  = Leaf { title :: !String, after :: ![TodoItem] }
   | Branch
-      { title :: String
-      , description :: String
-      , dueDate :: ZonedTime
-      , after :: [TodoItem]
+      { title :: !String
+      , description :: !String
+      , dueDate :: !ZonedTime
+      , after :: ![TodoItem]
       }
   | Root
-      { title :: String
-      , description :: String
-      , startDate :: ZonedTime
-      , endDate :: ZonedTime
-      , after :: [TodoItem]
+      { title :: !String
+      , description :: !String
+      , startDate :: !ZonedTime
+      , endDate :: !ZonedTime
+      , after :: ![TodoItem]
       }
-  deriving (Show)
+  deriving (Show, Generic)
 
 instance Eq TodoItem where
   a == b = a `compare` b == EQ
