@@ -1,8 +1,11 @@
 module Todo.TodoSpec (spec) where
 
 import Test.Hspec
+import Test.QuickCheck
+import Test.Hspec.QuickCheck (modifyMaxSuccess, modifyMaxSize)
 import Data.Time (getZonedTime)
 import Todo.Todo
+import ArbitraryInstances ()
 
 isTopological :: [TodoItem] -> Bool
 isTopological [] = True
@@ -49,3 +52,7 @@ spec = do
           time
           [ Leaf "I'm a child!" [] ]
           ) `shouldBe` False
+
+  modifyMaxSuccess (const 100) $ modifyMaxSize (const 10) $ describe "createOrder" $ do
+    it "always creates a topological order" $ property $ \ x ->
+      isTopological x `shouldBe` True
