@@ -14,7 +14,7 @@ isTopological (x:xs) = locallyTopological && isTopological xs
     locallyTopological = not . any (shouldBeAfter x) $ xs
 
 spec :: Spec
-spec = do
+spec = modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ do
   describe "shouldBeAfter" $ do
     it "can properly determine that two TodoItems are direct dependents." $ do
       time <- getZonedTime
@@ -55,10 +55,10 @@ spec = do
         [ Leaf "I'm a child!" [] ]
         ) `shouldBe` False
 
-  modifyMaxSuccess (const 1000) $ modifyMaxSize (const 7) $ describe "createOrder" $ do
+  describe "createOrder" $ do
     it "always creates a topological order" $ property $ \x ->
       isTopological (createOrder x) `shouldBe` True
 
-  modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ describe "createOrderMany" $ do
+  describe "createOrderMany" $ do
     it "always creates a topological order" $ property $ \x ->
       isTopological (createOrderMany x) `shouldBe` True
