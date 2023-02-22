@@ -1,4 +1,4 @@
-module Todo.TodoCoreSpec (spec) where
+module Todo.CoreSpec (spec) where
 
 import Test.Hspec
 import Test.QuickCheck
@@ -12,7 +12,7 @@ import Todo.Core
 import Todo.Todo (isLeaf, isBranch, isRoot)
 
 spec :: Spec
-spec = modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ do
+spec = do
   describe "title" $ do
     it "should return the title of a TodoItem." $ do
       time <- getZonedTime
