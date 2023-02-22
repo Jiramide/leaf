@@ -1,9 +1,17 @@
-module ArbitraryInstances () where
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveGeneric #-}
+
+module ArbitraryInstances
+  ( OnlyLeaves (unOnlyLeaves)
+  , OnlyBranches (unOnlyBranches)
+  , OnlyRoots (unOnlyRoots)
+  ) where
 
 import Todo.Core
   ( TodoItem(..)
   )
 
+import GHC.Generics (Generic)
 import Data.Time
   ( ZonedTime(..)
   , TimeZone(..)
@@ -17,6 +25,13 @@ import Data.Time.Calendar.OrdinalDate
   )
 
 import Test.QuickCheck
+
+newtype OnlyLeaves = OnlyLeaves { unOnlyLeaves :: TodoItem }
+  deriving (Generic, Eq, Ord, Show)
+newtype OnlyBranches = OnlyBranches { unOnlyBranches :: TodoItem }
+  deriving (Generic, Eq, Ord, Show)
+newtype OnlyRoots = OnlyRoots { unOnlyRoots :: TodoItem }
+  deriving (Generic, Eq, Ord, Show)
 
 arbitraryString :: Gen String
 arbitraryString = listOf $ arbitraryPrintable
@@ -76,3 +91,32 @@ instance Arbitrary TodoItem where
       shrinkDownwards (Leaf _ dependencies) = dependencies
       shrinkDownwards (Branch name _ _ dependencies) = [Leaf name dependencies]
       shrinkDownwards (Root name desc _ end dependencies) = [Branch name desc end dependencies]
+
+instance Arbitrary OnlyLeaves where
+  arbitrary = sized $ \n -> fmap OnlyLeaves
+    $ Leaf
+    <$> arbitraryString
+    <*> listOf (unOnlyLeaves <$> resize (n - 1) arbitrary)
+
+  shrink = genericShrink
+
+instance Arbitrary OnlyBranches where
+  arbitrary = sized $ \n -> fmap OnlyBranches
+    $ Branch
+    <$> arbitraryString
+    <*> arbitraryString
+    <*> arbitrary
+    <*> listOf (unOnlyBranches <$> resize (n - 1) arbitrary)
+
+  shrink = genericShrink
+
+instance Arbitrary OnlyRoots where
+  arbitrary = sized $ \n -> fmap OnlyRoots
+    $ Root
+    <$> arbitraryString
+    <*> arbitraryString
+    <*> arbitrary
+    <*> arbitrary
+    <*> listOf (unOnlyRoots <$> resize (n - 1) arbitrary)
+
+  shrink = genericShrink
