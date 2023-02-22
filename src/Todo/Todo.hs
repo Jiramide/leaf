@@ -11,21 +11,17 @@ module Todo.Todo
 import Todo.Core
 import Control.Monad.State
   ( State
-  , runState
   , evalState
   , get
-  , put
   , modify
   , forM
   )
-import Data.Semigroup ((<>))
 import Data.Set
   ( Set
   , empty
   , insert
   , member
   )
-import Data.Time (ZonedTime, zonedTimeToUTC)
 
 isLeaf :: TodoItem -> Bool
 isLeaf (Leaf _ _) = True
