@@ -78,6 +78,7 @@ test-suite leaf-test
   main-is: Spec.hs
   other-modules:
       ArbitraryInstances
+      Todo.TodoCoreSpec
       Todo.TodoListSpec
       Todo.TodoSpec
       Paths_leaf
