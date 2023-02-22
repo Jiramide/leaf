@@ -6,12 +6,17 @@ module Todo.TodoList
   ) where
 
 import Todo.Core
+import Todo.Todo
+  ( isLeaf
+  , isBranch
+  , isRoot
+  )
 
 getLeaves :: TodoList -> TodoList
-getLeaves = undefined
+getLeaves = filter isLeaf
 
 getBranches :: TodoList -> TodoList
-getBranches = undefined
+getBranches = filter isBranch
 
 getRoots :: TodoList -> TodoList
-getRoots = undefined
+getRoots = filter isRoot
