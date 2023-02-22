@@ -14,7 +14,7 @@ isTopological (x:xs) = locallyTopological && isTopological xs
     locallyTopological = not . any (shouldBeAfter x) $ xs
 
 spec :: Spec
-spec = modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ do
+spec = do
   describe "shouldBeAfter" $ do
     it "can properly determine that two TodoItems are direct dependents." $ do
       time <- getZonedTime

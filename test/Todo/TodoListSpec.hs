@@ -8,7 +8,7 @@ import Todo.TodoList
 import ArbitraryInstances
 
 spec :: Spec
-spec = modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ do
+spec = do
   describe "getLeaves" $ do
     it "should always only return leaves." $ property $ \x ->
       getLeaves x `shouldSatisfy` all isLeaf
