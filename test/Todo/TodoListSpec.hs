@@ -10,49 +10,40 @@ import ArbitraryInstances
 spec :: Spec
 spec = modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ do
   describe "getLeaves" $ do
-    it "should always only return leaves." $ property $ \x -> do
+    it "should always only return leaves." $ property $ \x ->
       getLeaves x `shouldSatisfy` all isLeaf
     
-    it "should never remove leaves." $ property $ \x -> do
-      let x' = fmap unOnlyLeaves x
-      getLeaves x' `shouldBe` x'
+    it "should never remove leaves." $ property $ \x ->
+      let x' = fmap unOnlyLeaves x in getLeaves x' `shouldBe` x'
 
-    it "should always remove branches." $ property $ \x -> do
-      let x' = fmap unOnlyBranches x
-      getLeaves x' `shouldBe` []
+    it "should always remove branches." $ property $ \x ->
+      let x' = fmap unOnlyBranches x in getLeaves x' `shouldBe` []
 
-    it "should always remove roots." $ property $ \x -> do
-      let x' = fmap unOnlyRoots x
-      getLeaves x' `shouldBe` []
+    it "should always remove roots." $ property $ \x ->
+      let x' = fmap unOnlyRoots x in getLeaves x' `shouldBe` []
 
   describe "getBranches" $ do
-    it "should always only return branches." $ property $ \x -> do
+    it "should always only return branches." $ property $ \x ->
       getBranches x `shouldSatisfy` all isBranch
     
-    it "should always remove leaves." $ property $ \x -> do
-      let x' = fmap unOnlyLeaves x
-      getBranches x' `shouldBe` []
+    it "should always remove leaves." $ property $ \x ->
+      let x' = fmap unOnlyLeaves x in getBranches x' `shouldBe` []
 
-    it "should never remove branches." $ property $ \x -> do
-      let x' = fmap unOnlyBranches x
-      getBranches x' `shouldBe` x'
+    it "should never remove branches." $ property $ \x ->
+      let x' = fmap unOnlyBranches x in getBranches x' `shouldBe` x'
 
-    it "should always remove roots." $ property $ \x -> do
-      let x' = fmap unOnlyRoots x
-      getBranches x' `shouldBe` []
+    it "should always remove roots." $ property $ \x ->
+      let x' = fmap unOnlyRoots x in getBranches x' `shouldBe` []
 
   describe "getRoots" $ do
-    it "should always only return roots." $ property $ \x -> do
+    it "should always only return roots." $ property $ \x ->
       getRoots x `shouldSatisfy` all isRoot
     
-    it "should always remove leaves." $ property $ \x -> do
-      let x' = fmap unOnlyLeaves x
-      getRoots x' `shouldBe` []
+    it "should always remove leaves." $ property $ \x ->
+      let x' = fmap unOnlyLeaves x in getRoots x' `shouldBe` []
 
-    it "should always remove branches." $ property $ \x -> do
-      let x' = fmap unOnlyBranches x
-      getRoots x' `shouldBe` []
+    it "should always remove branches." $ property $ \x ->
+      let x' = fmap unOnlyBranches x in getRoots x' `shouldBe` []
 
-    it "should never remove roots." $ property $ \x -> do
-      let x' = fmap unOnlyRoots x
-      getRoots x' `shouldBe` x'
+    it "should never remove roots." $ property $ \x ->
+      let x' = fmap unOnlyRoots x in getRoots x' `shouldBe` x'
