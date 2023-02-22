@@ -20,9 +20,9 @@ spec = modifyMaxSuccess (const 100) $ modifyMaxSize (const 7) $ do
       title (Branch "Howdy" "Cool" time []) `shouldBe` "Howdy"
       title (Root "abc" "def" time time []) `shouldBe` "abc"
 
-  describe "==" $ do
-    it "should be reflexive." $ property $ \x -> do
-      x == x `shouldBe` True
+  describe "(==)" $ do
+    it "should be reflexive." $ property $ \x ->
+      (x :: TodoItem) == x `shouldBe` True
 
     it "should compare against titles first." $ property $ \(x, y) ->
       title x /= title y ==> compare x y `shouldBe` comparing title x y
