@@ -79,7 +79,7 @@ test-suite leaf-test
   other-modules:
       ArbitraryInstances
       SpecHook
-      Todo.TodoCoreSpec
+      Todo.CoreSpec
       Todo.TodoListSpec
       Todo.TodoSpec
       Paths_leaf
