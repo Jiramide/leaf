@@ -39,6 +39,7 @@ library
       base >=4.7 && <5
     , containers
     , mtl
+    , text
     , time
   default-language: Haskell2010
 
@@ -54,6 +55,7 @@ executable leaf-gui-exe
     , containers
     , leaf
     , mtl
+    , text
     , time
   default-language: Haskell2010
 
@@ -70,6 +72,7 @@ executable leaf-tui-exe
     , containers
     , leaf
     , mtl
+    , text
     , time
   default-language: Haskell2010
 
@@ -94,5 +97,6 @@ test-suite leaf-test
     , hspec-discover
     , leaf
     , mtl
+    , text
     , time
   default-language: Haskell2010

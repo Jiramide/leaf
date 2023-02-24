@@ -1,10 +1,19 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
 module Todo.Core
-  ( TodoItem(..)
+  ( Completed
+  , Dependencies
+  , TodoItemId
+  , TodoTitle
+  , TodoTime
   , TodoList
+  , TodoItem(..)
+  , TodoType(..)
   ) where
 
+import qualified Data.Text as Text
+import Data.Ord (comparing)
 import Data.Time
   ( ZonedTime
   , zonedTimeToUTC
@@ -12,44 +21,49 @@ import Data.Time
 
 import GHC.Generics
 
+type Completed = Bool
+type Dependencies = [TodoItemId]
+type TodoItemId = Integer
+type TodoTitle = Text.Text
+type TodoTime = ZonedTime
+type TodoList = [TodoItem]
+
 data TodoItem
-  = Leaf { title :: !String, after :: ![TodoItem] }
+  = TodoItem
+      { todoId :: TodoItemId
+      , todoTitle :: TodoTitle
+      , todoType :: TodoType
+      , todoCompleted :: Completed
+      , todoDependencies :: Dependencies
+      }
+  deriving (Show, Eq, Ord, Generic)
+
+data TodoType
+  = Leaf
   | Branch
-      { title :: !String
-      , description :: !String
-      , dueDate :: !ZonedTime
-      , after :: ![TodoItem]
-      }
+      TodoTitle -- description
+      TodoTime -- dueDate
   | Root
-      { title :: !String
-      , description :: !String
-      , startDate :: !ZonedTime
-      , endDate :: !ZonedTime
-      , after :: ![TodoItem]
-      }
+      TodoTitle -- description
+      TodoTime -- startDate
+      TodoTime -- endDate
   deriving (Show, Generic)
 
-instance Eq TodoItem where
+instance Eq TodoType where
   a == b = a `compare` b == EQ
 
-instance Ord TodoItem where
-  Leaf t a `compare` Leaf t' a' = t `compare` t' <> a `compare` a'
-  Leaf _ _ `compare` _ = LT
+instance Ord TodoType where
+  Leaf `compare` Leaf = EQ
+  Leaf `compare` _ = LT
 
-  Branch _ _ _ _ `compare` Leaf _ _ = GT
-  Branch t d due a `compare` Branch t' d' due' a'
-    = t `compare` t'
-      <> d `compare` d'
-      <> zonedTimeToUTC due `compare` zonedTimeToUTC due'
-      <> a `compare` a'
-  Branch _ _ _ _ `compare` Root _ _ _ _ _ = LT
+  Branch _ _ `compare` Leaf = GT
+  Branch desc due `compare` Branch desc' due'
+     = compare desc desc'
+     <> comparing zonedTimeToUTC due due'
+  Branch _ _ `compare` _ = LT
 
-  Root t d s e a `compare` Root t' d' s' e' a'
-    = t `compare` t'
-      <> d `compare` d'
-      <> zonedTimeToUTC s `compare` zonedTimeToUTC s'
-      <> zonedTimeToUTC e `compare` zonedTimeToUTC e'
-      <> a `compare` a'
-  Root _ _ _ _ _ `compare` _ = GT
-
-type TodoList = [TodoItem]
+  Root desc start end `compare` Root desc' start' end'
+    = compare desc desc'
+    <> comparing zonedTimeToUTC start start'
+    <> comparing zonedTimeToUTC end end'
+  Root _ _ _ `compare` _ = GT

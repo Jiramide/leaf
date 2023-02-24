@@ -20,3 +20,9 @@ getBranches = filter isBranch
 
 getRoots :: TodoList -> TodoList
 getRoots = filter isRoot
+
+addTodo :: TodoItem -> TodoList -> TodoList
+addTodo = (:)
+
+deleteTodo :: TodoItem -> TodoList -> TodoList
+deleteTodo t = filter (/= t)
