@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Graph.Core
-  ( Graph
+  ( Graph (..)
   ) where
 
 import GHC.Generics (Generic)
