@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Graph.Core
       Lib
       Todo.Core
       Todo.Safe
