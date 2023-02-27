@@ -5,9 +5,10 @@ module Todo.Todo
   , isLeaf
   , isBranch
   , isRoot
-  , createOrderMany
-  , createOrder
-  , shouldBeAfter
+  , todoDescription
+  , todoDueDate
+  , todoStartDate
+  , todoEndDate
   ) where
 
 import Todo.Core
@@ -17,12 +18,6 @@ import Control.Monad.State
   , get
   , modify
   , forM
-  )
-import Data.Set
-  ( Set
-  , empty
-  , insert
-  , member
   )
 
 isLeaf :: TodoItem -> Bool
