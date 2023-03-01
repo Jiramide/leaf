@@ -29,7 +29,6 @@ library
       Graph.Graph
       Lib
       Todo.Core
-      Todo.Safe
       Todo.Todo
       Todo.TodoList
   other-modules:
