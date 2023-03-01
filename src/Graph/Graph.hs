@@ -17,7 +17,7 @@ insertVertex :: (Ord v) => v -> Graph c v -> Graph c v
 insertVertex v = Graph . Map.insert v Map.empty . graph
 
 insertEdge :: (Ord v) => v -> v -> c -> Graph c v -> Graph c v
-insertEdge outVertex inVertex cost g
+insertEdge outVertex inVertex cost
   = Graph
   . Map.update (Just . Map.insert inVertex cost) outVertex
   . graph
