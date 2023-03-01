@@ -33,19 +33,19 @@ isRoot x = not $ isLeaf x || isBranch x
 
 todoDescription :: TodoItem -> Maybe TodoTitle
 todoDescription (todoType -> Leaf) = Nothing
-todoDescription (todoType -> Branch desc _) = desc
-todoDescription (todoType -> Root desc _ _) = desc
+todoDescription (todoType -> Branch desc _) = Just desc
+todoDescription (todoType -> Root desc _ _) = Just desc
 
 todoDueDate :: TodoItem -> Maybe TodoTime
 todoDueDate (todoType -> Branch _ due) = Just due
 todoDueDate _ = Nothing
 
 todoStartDate :: TodoItem -> Maybe TodoTime
-todoStartDate (todoType -> Leaf _ start _) = Just start
+todoStartDate (todoType -> Root _ start _) = Just start
 todoStartDate _ = Nothing
 
 todoEndDate :: TodoItem -> Maybe TodoTime
-todoEndDate (todoType -> Leaf _ _ end) = Just end
+todoEndDate (todoType -> Root _ _ end) = Just end
 todoEndDate _ = Nothing
 
 createOrderM :: TodoItem -> TodoList -> State (Set TodoItem) [TodoItem]
