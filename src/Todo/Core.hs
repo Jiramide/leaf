@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Todo.Core
-  ( Completed
+  ( TodoStatus(..)
   , Dependencies
   , TodoItemId
   , TodoTitle
@@ -21,19 +21,25 @@ import Data.Time
 
 import GHC.Generics
 
-type Completed = Bool
 type Dependencies = [TodoItemId]
 type TodoItemId = Integer
 type TodoTitle = Text.Text
 type TodoTime = ZonedTime
 type TodoList = [TodoItem]
 
+data TodoStatus
+  = NotStarted
+  | InProgress
+  | Delayed
+  | Finished
+  deriving (Show, Eq, Ord, Enum, Bounded, Generic)
+
 data TodoItem
   = TodoItem
       { todoId :: TodoItemId
       , todoTitle :: TodoTitle
       , todoType :: TodoType
-      , todoCompleted :: Completed
+      , todoStatus :: TodoStatus
       , todoDependencies :: Dependencies
       }
   deriving (Show, Eq, Ord, Generic)
