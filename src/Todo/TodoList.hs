@@ -3,6 +3,9 @@ module Todo.TodoList
   , getLeaves
   , getBranches
   , getRoots
+  , addTodo
+  , deleteTodo
+  , getTodoById
   ) where
 
 import Todo.Core
@@ -26,3 +29,6 @@ addTodo = (:)
 
 deleteTodo :: TodoItem -> TodoList -> TodoList
 deleteTodo t = filter (/= t)
+
+getTodoById :: TodoItemId -> TodoList -> TodoList
+getTodoById t = _
