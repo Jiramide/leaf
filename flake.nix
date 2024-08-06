@@ -12,7 +12,7 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        conig.allowUnfree = true;
+        config.allowUnfree = true;
       };
     in
     {
@@ -20,11 +20,11 @@
         packages = with pkgs; [
           cabal-install
           ghc
-          haskellPackages.hls
+          haskell-language-server
           ormolu
         ];
-      };
 
-      DEV_SHELL_ACTIVE = "leaf-hs";
+        DEV_SHELL_ACTIVE = "leaf-hs";
+      };
     };
 }
